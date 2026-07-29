@@ -1,6 +1,7 @@
 FROM ubuntu:jammy
 
-ARG GO_VERSION=1.24.4
+ARG GO_VERSION=1.26.5
+ARG CLAUDE_CODE_VERSION=2.1.220
 
 RUN apt-get update -y && \
     apt-get install -y curl wget git unzip zip ca-certificates build-essential dnsutils telnet vim ripgrep fzf netcat-openbsd jq \
@@ -31,7 +32,7 @@ RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/ins
     go clean -cache -modcache
 
 # Claude
-RUN bun i -g @anthropic-ai/claude-code
+RUN bun i -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
 
 # uv
 RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR=/usr/local/bin sh
