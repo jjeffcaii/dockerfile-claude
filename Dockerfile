@@ -1,7 +1,7 @@
 FROM ubuntu:jammy
 
 ARG GO_VERSION=1.26.5
-ARG CLAUDE_CODE_VERSION=2.1.220
+ARG CLAUDE_CODE_VERSION=2.1.223
 
 RUN apt-get update -y && \
     apt-get install -y curl wget git unzip zip ca-certificates build-essential dnsutils telnet vim ripgrep fzf netcat-openbsd jq \
