@@ -5,7 +5,7 @@ ARG CLAUDE_CODE_VERSION=2.1.260
 
 RUN apt-get update -y && \
     apt-get install -y curl wget git unzip zip ca-certificates build-essential dnsutils telnet vim ripgrep fzf netcat-openbsd jq \
-        openjdk-17-jdk maven \
+        openjdk-8-jdk openjdk-11-jdk openjdk-17-jdk openjdk-21-jdk maven \
         imagemagick \
         python3 python3-pip python3-venv && \
     rm -rf /var/lib/apt/lists/*
@@ -45,6 +45,16 @@ RUN install -m 0755 -d /etc/apt/keyrings && \
     apt-get update -y && \
     apt-get install -y docker-ce-cli docker-buildx-plugin docker-compose-plugin && \
     rm -rf /var/lib/apt/lists/*
+
+# jenv (manage the openjdk 8/11/17/21 installed above)
+ENV JENV_ROOT=/root/.jenv
+ENV PATH="${JENV_ROOT}/shims:${JENV_ROOT}/bin:${PATH}"
+RUN git clone --depth 1 https://github.com/jenv/jenv.git "${JENV_ROOT}" && \
+    jenv enable-plugin export && \
+    for v in 8 11 17 21; do jenv add "/usr/lib/jvm/java-${v}-openjdk-$(dpkg --print-architecture)"; done && \
+    jenv global 17 && \
+    jenv rehash && \
+    echo 'eval "$(jenv init -)"' >> /root/.bashrc
 
 VOLUME /root/.m2
 VOLUME /root/.claude
