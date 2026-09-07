@@ -55,6 +55,7 @@ RUN git clone --depth 1 https://github.com/jenv/jenv.git "${JENV_ROOT}" && \
     for v in 8 11 17 21; do jenv add "/usr/lib/jvm/java-${v}-openjdk-$(dpkg --print-architecture)"; done && \
     jenv global 17 && \
     jenv rehash && \
+    jenv refresh-plugins && \
     echo 'eval "$(jenv init -)"' >> /root/.bashrc
 
 VOLUME /root/.m2
