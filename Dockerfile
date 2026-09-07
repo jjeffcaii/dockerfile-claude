@@ -1,7 +1,7 @@
 FROM ubuntu:jammy
 
 ARG GO_VERSION=1.26.5
-ARG CLAUDE_CODE_VERSION=2.1.260
+ARG CLAUDE_CODE_VERSION=2.1.261
 
 RUN apt-get update -y && \
     apt-get install -y curl wget git unzip zip ca-certificates build-essential dnsutils telnet vim ripgrep fzf netcat-openbsd jq \
@@ -50,7 +50,8 @@ RUN install -m 0755 -d /etc/apt/keyrings && \
 ENV JENV_ROOT=/root/.jenv
 ENV PATH="${JENV_ROOT}/shims:${JENV_ROOT}/bin:${PATH}"
 RUN git clone --depth 1 https://github.com/jenv/jenv.git "${JENV_ROOT}" && \
-    jenv enable-plugin export && \
+    mkdir -p "${JENV_ROOT}/plugins" && \
+    ln -s "${JENV_ROOT}/available-plugins/export" "${JENV_ROOT}/plugins/export" && \
     for v in 8 11 17 21; do jenv add "/usr/lib/jvm/java-${v}-openjdk-$(dpkg --print-architecture)"; done && \
     jenv global 17 && \
     jenv rehash && \
