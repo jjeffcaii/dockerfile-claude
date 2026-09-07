@@ -37,6 +37,15 @@ RUN bun i -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
 # uv
 RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR=/usr/local/bin sh
 
+# Docker CLI (client only; talks to a mounted /var/run/docker.sock)
+RUN install -m 0755 -d /etc/apt/keyrings && \
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc && \
+    chmod a+r /etc/apt/keyrings/docker.asc && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu jammy stable" > /etc/apt/sources.list.d/docker.list && \
+    apt-get update -y && \
+    apt-get install -y docker-ce-cli docker-buildx-plugin docker-compose-plugin && \
+    rm -rf /var/lib/apt/lists/*
+
 VOLUME /root/.m2
 VOLUME /root/.claude
 VOLUME /tmp
